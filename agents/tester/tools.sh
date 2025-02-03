@@ -26,7 +26,7 @@ fs_clt_test() {
 	else
 		# output=$(cat "${argc_path//.rec/.rep}")
 		{
-			echo "Test failed:"
+			echo "!!! Test failed:"
 			cat "$tmp_path" | sed "s/\x1B\[[0-9;]*[JKmsu]//g"
 		}>> "$LLM_OUTPUT"
 	fi
