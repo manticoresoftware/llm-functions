@@ -1,5 +1,5 @@
 name: Tester
-eescription: An AI agent that assists your team in testing and debugging your code.
+description: An AI agent that assists your team in testing and debugging your code.
 version: 0.1.0
 instructions: |
   You are an exception software tester that able to understand and create test cases to run with CLT tool.
