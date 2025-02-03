@@ -21,28 +21,26 @@ fs_create() {
 fs_clt_test() {
 	"$ROOT_DIR/utils/guard_path.sh" "$argc_path" "Run CLT test from  '$argc_path'?"
 	tmp_path=$(mktemp)
-	if /Users/dk/work/dev/manticore/manticoresearch/clt/clt test -d -t "$argc_path" ghcr.io/manticoresoftware/manticoresearch:test-kit-latest > $tmp_path; then
+	if clt test -d -t "$argc_path" ghcr.io/manticoresoftware/manticoresearch:test-kit-latest > $tmp_path; then
 		echo "Test passed! Job done" >> "$LLM_OUTPUT"
 	else
-		output=$(cat "${argc_path//.rec/.rep}")
+		# output=$(cat "${argc_path//.rec/.rep}")
 		{
-			echo "Test failed, please review and repeat."
-			echo "Here is the output of all test:"
-			echo "\`\`\`"
-			echo "$output"
-			echo "\`\`\`"
-			echo "And here are the diff that you should fix."
-			echo "- ..."
-			echo "+ ..."
-			echo "It means that line in - not match in + and + .. is actual output of the test."
-			echo "Look and fix it to match or if you think this is error in behaviour of the test, please report it."
-			echo "\`\`\`"
-			cat "$tmp_path"
-			echo "\`\`\`"
-
-		} >> "$LLM_OUTPUT"
+			echo "Test failed:"
+			cat "$tmp_path" | sed "s/\x1B\[[0-9;]*[JKmsu]//g"
+		}>> "$LLM_OUTPUT"
 	fi
 	cat "$tmp_path"
+}
+
+# @cmd List all tests we have in working directory test/clt-tests
+fs_list_tests() {
+	tree -P "*.rec*" --prune test/clt-tests >> "$LLM_OUTPUT"
+}
+
+# cmd List all manuals docs we have in .md format with documentation
+fs_list_docs() {
+	tree -P "*.md" --prune manual >> "$LLM_OUTPUT"
 }
 
 # See more details at https://github.com/sigoden/argc
